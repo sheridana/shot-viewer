@@ -52,6 +52,8 @@ var yValue = function(d) { return d["location y"];}, // data -> value
 // setup fill color
 var cValue = function(d) { return d["shoot player"];},
     color = d3.scale.category10();
+//var color = d3.scaleSequential(d3.interpolateRainbow);
+
 
 // add the graph canvas to the body of the webpage
 var svg = d3.select("body").append("svg")
@@ -66,15 +68,23 @@ var tooltip = d3.select("body").append("div")
     .style("opacity", 0);
 
 // load data
-d3.csv("data/shot log CLE.csv", function(error, data) {
+d3.csv("data/shot log CLE.csv", function(error, all_data) {
   if(error) {
       console.log(error);
   }
 
   // change string (from CSV) into number format
-  data.forEach(function(d) {
-    d["location x"] = +d["location x"];
-    d["location y"] = +d["location y"];
+  var data = [];
+  all_data.forEach(function(d) {
+
+    if(d["shoot player"] === "LeBron James") {
+        console.log(d["shoot player"]);
+        d["location x"] = +d["location x"];
+        d["location y"] = +d["location y"];
+        data.push(d);
+    }
+    // d["location x"] = +d["location x"];
+    // d["location y"] = +d["location y"];
 //    console.log(d);
   });
 
