@@ -37,7 +37,7 @@ var margin = {top: 20, right: 20, bottom: 30, left: 40},
     width = 960 - margin.left - margin.right,
     height = 500 - margin.top - margin.bottom;
 
-// setup x 
+// setup x
 var xValue = function(d) { return d["location x"];}, // data -> value
     xScale = d3.scale.linear().range([0, width]), // value -> display
     xMap = function(d) { return xScale(xValue(d));}, // data -> display
@@ -67,6 +67,9 @@ var tooltip = d3.select("body").append("div")
 
 // load data
 d3.csv("data/shot log CLE.csv", function(error, data) {
+  if(error) {
+      console.log(error);
+  }
 
   // change string (from CSV) into number format
   data.forEach(function(d) {
@@ -111,12 +114,12 @@ d3.csv("data/shot log CLE.csv", function(error, data) {
       .attr("r", 3.5)
       .attr("cx", xMap)
       .attr("cy", yMap)
-      .style("fill", function(d) { return color(cValue(d));}) 
+      .style("fill", function(d) { return color(cValue(d));})
       .on("mouseover", function(d) {
           tooltip.transition()
                .duration(200)
                .style("opacity", .9);
-          tooltip.html(d["shoot player"] + "<br/> (" + xValue(d) 
+          tooltip.html(d["shoot player"] + "<br/> (" + xValue(d)
 	        + ", " + yValue(d) + ")")
                .style("left", (d3.event.pageX + 5) + "px")
                .style("top", (d3.event.pageY - 28) + "px");
