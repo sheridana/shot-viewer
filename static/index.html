@@ -18,6 +18,12 @@ body {
   shape-rendering: crispEdges;
 }
 
+.axis text {
+  fill:black;   /* <== Set the fill */
+  text-shadow: 0 1px 0 #fff, 1px 0 0 #fff, 0 -1px 0 #fff, -1px 0 0 #fff;
+  cursor: move;
+}
+
 .dot {
   stroke: #000;
 }
@@ -30,7 +36,7 @@ body {
 }
 </style>
 <body>
-<script src="http://d3js.org/d3.v3.min.js"></script>
+<script src="http://d3js.org/d3.v4.min.js"></script>
 
 <script>
 var margin = {top: 20, right: 20, bottom: 30, left: 40},
@@ -39,19 +45,21 @@ var margin = {top: 20, right: 20, bottom: 30, left: 40},
 
 // setup x
 var xValue = function(d) { return d["location x"];}, // data -> value
-    xScale = d3.scale.linear().range([0, width]), // value -> display
+    xScale = d3.scaleLinear().range([0, width]), // value -> display
     xMap = function(d) { return xScale(xValue(d));}, // data -> display
-    xAxis = d3.svg.axis().scale(xScale).orient("bottom");
+    xAxis = d3.axisBottom()
+      .scale(xScale);
 
 // setup y
 var yValue = function(d) { return d["location y"];}, // data -> value
-    yScale = d3.scale.linear().range([height, 0]), // value -> display
+    yScale = d3.scaleLinear().range([height, 0]), // value -> display
     yMap = function(d) { return yScale(yValue(d));}, // data -> display
-    yAxis = d3.svg.axis().scale(yScale).orient("left");
+    yAxis = d3.axisLeft()
+      .scale(yScale);
 
 // setup fill color
 var cValue = function(d) { return d["shoot player"];},
-    color = d3.scale.category10();
+    color = d3.scaleOrdinal(d3.schemeCategory10);
 //var color = d3.scaleSequential(d3.interpolateRainbow);
 
 
