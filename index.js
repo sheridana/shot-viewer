@@ -13,6 +13,8 @@ app.listen(8000, function () {
 // app.use('/', express.static(__dirname + '/static'));
 app.use('/data', express.static(__dirname + '/static/data'));
 
-app.get('/', function (req, res) {
-    res.sendFile(path.join(__dirname + '/static/index.html'));
-});
+// app.get('/', function (req, res) {
+//     res.sendFile(path.join(__dirname + '/static/index.html'));
+// });
+
+app.use(express.static('static'))
