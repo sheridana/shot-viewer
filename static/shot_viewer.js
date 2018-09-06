@@ -2,12 +2,11 @@ var margin = {top: 20, right: 100, bottom: 30, left: 40},
     width = 960 - margin.left - margin.right,
     height = 500 - margin.top - margin.bottom;
 
-var x0 = function(d) { return d["location x"];},
-    y0 = function(d) { return d["location y"];},
-    x = d3.scaleLinear().domain(x0).range([0, width]),
-    y = d3.scaleLinear().domain(y0).range([height, 0]),
-    xMap = function(d){ return x(x0(d));};
-    yMap = function(d){ return y(y0(d));};
+var x = d3.scaleLinear().domain([-1, 1]).range([0, width]),
+    y = d3.scaleLinear().domain([-1, 1]).range([height, 0]),
+    x_val = function(d) { }
+    xMap = function(d){ return d["location x"];};
+    yMap = function(d){ return d["location y"];};
 
 var xAxis = d3.axisBottom()
       .scale(x);
@@ -46,8 +45,10 @@ d3.csv("data/shot log CLE.csv", function(error, all_data) {
 //    console.log(d);
   });
 
-x.domain([d3.min(data, x0)-1, d3.max(data, x0)+1]);
-y.domain([d3.min(data, y0)-1, d3.max(data, y0)+1]);
+  var x0 = [d3.min(data, xMap) - 1, d3.max(data, xMap) + 1];
+  var y0 = [d3.min(data, yMap) - 1, d3.max(data, yMap) + 1];
+x.domain(x0);
+y.domain(y0);
 
 var brush = d3.brush().on("end", brushended),
     idleTimeout,
@@ -58,14 +59,14 @@ svg.selectAll(".dot")
     .enter().append("circle")
       .attr("class", "dot")
       .attr("r", 3.5)
-      .attr("cx", xMap)
-      .attr("cy", yMap)
+      .attr("cx", function(d) { return x(xMap(d)); })
+      .attr("cy", function(d) { return y(yMap(d)); })
       .style("fill", function(d) { return color(cValue(d));})
       .on("mouseover", function(d) {
           tooltip.transition()
                .duration(200)
                .style("opacity", 0.9);
-          tooltip.html(d["shoot player"] + "<br/> (" + x0(d) + ", " + y0(d) + ")")
+          tooltip.html(d["shoot player"] + "<br/> (" + xMap(d) + ", " + yMap(d) + ")")
                .style("left", (d3.event.pageX + 5) + "px")
                .style("top", (d3.event.pageY - 28) + "px");
       })
@@ -152,7 +153,7 @@ function zoom() {
   svg.select(".axis--x").transition(t).call(xAxis);
   svg.select(".axis--y").transition(t).call(yAxis);
   svg.selectAll("circle").transition(t)
-      .attr("cx", xMap)
-      .attr("cy", yMap);
+      .attr("cx", function(d) { return x(xMap(d)) })
+      .attr("cy", function(d) { return y(yMap(d)) });
 }
 })
