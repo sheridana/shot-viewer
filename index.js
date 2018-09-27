@@ -6,8 +6,10 @@ var path = require('path');
 //     res.send('Hello World!')
 // });
 
-app.listen(8000, function () {
-    console.log('Example app listening on port 8000!')
+var port = process.env.PORT || 8000;
+
+app.listen(port, function () {
+    console.log('Example app listening on port ' + port + '!')
 });
 
 // app.use('/', express.static(__dirname + '/static'));
