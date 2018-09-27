@@ -4,7 +4,7 @@ var margin = {top: 20, right: 100, bottom: 30, left: 40},
 
 var x = d3.scaleLinear().domain([-1, 1]).range([0, width]),
     y = d3.scaleLinear().domain([-1, 1]).range([height, 0]),
-    x_val = function(d) { }
+    x_val = function(d) {};
     xMap = function(d){ return d["location x"];};
     yMap = function(d){ return d["location y"];};
 
@@ -22,6 +22,12 @@ var svg = d3.select("body").append("svg")
     .attr("height", height + margin.top + margin.bottom)
   .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+var svg = d3.select("div#container")
+    .append("svg")
+    .attr("preserveAspectRatio", "xMinYMin meet")
+    .attr("viewBox", "-50 -20 960 500")
+    .classed("svg-content", true);
 
 // add the tooltip area to the webpage
 var tooltip = d3.select("body").append("div")
@@ -107,7 +113,7 @@ svg.selectAll(".domain")
 svg.append("g")
     .attr("class", "brush")
     .call(brush);
-
+    
 // draw legend
 var legend = svg.selectAll(".legend")
     .data(color.domain())
@@ -153,7 +159,7 @@ function zoom() {
   svg.select(".axis--x").transition(t).call(xAxis);
   svg.select(".axis--y").transition(t).call(yAxis);
   svg.selectAll("circle").transition(t)
-      .attr("cx", function(d) { return x(xMap(d)) })
-      .attr("cy", function(d) { return y(yMap(d)) });
+      .attr("cx", function(d) { return x(xMap(d));})
+      .attr("cy", function(d) { return y(yMap(d));});
 }
-})
+});
